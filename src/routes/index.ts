@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import { Router } from "express";
 
-import v1Router from './v1/index.js';
+import v1Router from "./v1/index.js";
 
-const apiRouter = Router();
+const router = Router();
 
-apiRouter.use('/v1', v1Router);
+router.use("/v1", v1Router);
 
-export default apiRouter;
+export default router;

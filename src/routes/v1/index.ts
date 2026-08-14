@@ -1,8 +1,12 @@
 import { Router } from "express";
+
 import authRouter from "./auth.route.js";
+import roleRouter from "./role.route.js";
 
-const v1Router = Router();
+const router = Router();
 
-v1Router.use('/auth', authRouter);
+router.use("/auth", authRouter);
 
-export default v1Router;
+router.use("/roles", roleRouter);
+
+export default router;
