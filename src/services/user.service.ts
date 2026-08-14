@@ -2,7 +2,7 @@ import { Prisma, User } from "../../generated/prisma/client.js";
 import { SignupDto } from "../dtos/user.dto.js";
 import { IUserRepository } from "../repositories/user.repository.js";
 import { ConflictError } from "../utils/errors/app.error.js";
-import bcrypt from "bcrypt";
+import { hashPassword } from "../utils/password.hash.js";
 
 export interface IUserService {
   createUser(data: SignupDto): Promise<User>;
@@ -25,7 +25,7 @@ export class UserService implements IUserService {
         throw new ConflictError("Email already exists");
       }
 
-      const passwordHash = await bcrypt.hash(data.password, 10);
+      const passwordHash = await hashPassword(data.password);
 
       return await this.userRepository.create(data, passwordHash);
     } catch (error) {

@@ -15,10 +15,14 @@ export class UserController {
       success: true,
       message: "User registered successfully",
       data: {
-        ...user,
-        id: user.id.toString(),
-        roleId: user.roleId.toString(),
-      },
+              id: user.id.toString(),
+              fullName: user.fullName,
+              email: user.email,
+              roleId: user.roleId.toString(),
+              isActive: user.isActive,
+              createdAt: user.createdAt,
+              updatedAt: user.updatedAt,
+            },
     });
   }
 }
