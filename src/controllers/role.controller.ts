@@ -11,13 +11,41 @@ export class RoleController {
         this.roleService = roleService;
     }
 
-    createRoleHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    createRoleHandler = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         try {
             const data = req.body as CreateRoleDto;
 
             const role = await this.roleService.createRole(data);
 
-            sendSuccess(res, role, StatusCodes.CREATED, 'Role created successfully');
+            sendSuccess(
+                res,
+                role,
+                StatusCodes.CREATED,
+                "Role created successfully"
+            );
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getAllRoles = async (
+        _req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const roles = await this.roleService.getAllRoles();
+
+            sendSuccess(
+                res,
+                roles,
+                StatusCodes.OK,
+                "Roles fetched successfully"
+            );
         } catch (error) {
             next(error);
         }

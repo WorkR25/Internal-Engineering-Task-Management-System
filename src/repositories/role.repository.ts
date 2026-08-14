@@ -5,10 +5,12 @@ import { CreateRoleDto } from "../dtos/role.dto.js";
 export interface IRoleRepository {
     create(data: CreateRoleDto): Promise<Role>;
     find(id: bigint): Promise<Role | null>;
-    findByName(name: string): Promise<Role | null>
+    findByName(name: string): Promise<Role | null>;
+    findAll(): Promise<Role[]>;
 }
 
 export class RoleRepository implements IRoleRepository {
+
     async create(data: Prisma.RoleCreateInput): Promise<Role> {
         return await prisma.role.create({
             data
@@ -16,16 +18,22 @@ export class RoleRepository implements IRoleRepository {
     }
 
     async find(id: bigint): Promise<Role | null> {
-        return prisma.role.findUnique({
-            where: { id }
+        return await prisma.role.findUnique({
+            where: {
+                id
+            }
         });
     }
 
     async findByName(name: string): Promise<Role | null> {
-        return prisma.role.findUnique({
+        return await prisma.role.findUnique({
             where: {
                 name
             }
         });
+    }
+
+    async findAll(): Promise<Role[]> {
+        return await prisma.role.findMany();
     }
 }

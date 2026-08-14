@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../services/auth.service.js";
-import { NotimplementedError } from "../utils/errors/app.error.js";
+import { SignupDto } from "../dtos/auth.dto.js";
 
 export class AuthController {
     private readonly authService: IAuthService;
@@ -9,11 +9,34 @@ export class AuthController {
         this.authService = authService;
     }
 
-    async signupHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new NotimplementedError('Signup Handler is not implemented');
-    }
+    signupHandler = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const data = req.body as SignupDto;
 
-    async signinHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new NotimplementedError('Signin Handler is not implemented');
-    }
+            await this.authService.signup(data);
+
+            res.status(201).json({
+                success: true,
+                message: "User registered successfully"
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    signinHandler = async (
+        _req: Request,
+        _res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            throw new Error("Signin not implemented");
+        } catch (error) {
+            next(error);
+        }
+    };
 }

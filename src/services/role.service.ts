@@ -7,6 +7,7 @@ export interface IRoleService {
     createRole(data: CreateRoleDto): Promise<Role>;
     findRoleById(id: bigint): Promise<Role | null>;
     findRoleByName(name: string): Promise<Role | null>;
+    getAllRoles(): Promise<Role[]>;
 }
 
 export class RoleService implements IRoleService {
@@ -20,8 +21,16 @@ export class RoleService implements IRoleService {
         try {
             return await this.roleRepository.create(data);
         } catch (error) {
-            if(error instanceof Prisma.PrismaClientKnownRequestError && error.code == 'P2002') {
-                throw new ConflictError('A record with this value already exists', { fields: error.meta?.target });
+            if (
+                error instanceof Prisma.PrismaClientKnownRequestError &&
+                error.code === "P2002"
+            ) {
+                throw new ConflictError(
+                    "A record with this value already exists",
+                    {
+                        fields: error.meta?.target
+                    }
+                );
             }
 
             throw error;
@@ -29,22 +38,32 @@ export class RoleService implements IRoleService {
     }
 
     async findRoleById(id: bigint): Promise<Role | null> {
-        const role: Role | null = await this.roleRepository.find(id);
+        const role: Role | null =
+            await this.roleRepository.find(id);
 
-        if(!role) {
-            throw new BadRequestError('This is role is not exist');
+        if (!role) {
+            throw new BadRequestError(
+                "This is role is not exist"
+            );
         }
 
         return role;
     }
 
     async findRoleByName(name: string): Promise<Role | null> {
-        const role: Role | null = await this.roleRepository.findByName(name);
+        const role: Role | null =
+            await this.roleRepository.findByName(name);
 
-        if(!role) {
-            throw new BadRequestError('This is role is not exist');
+        if (!role) {
+            throw new BadRequestError(
+                "This is role is not exist"
+            );
         }
 
         return role;
+    }
+
+    async getAllRoles(): Promise<Role[]> {
+        return await this.roleRepository.findAll();
     }
 }
