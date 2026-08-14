@@ -9,11 +9,13 @@ export class AuthController {
         this.authService = authService;
     }
 
-    async signupHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new NotimplementedError('Signup Handler is not implemented');
+    async signupHandler(_req: Request, _res: Response, next: NextFunction): Promise<void> {
+        await this.authService.signup();
+        next(new NotimplementedError('Signup is not implemented yet'));
     }
 
-    async signinHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new NotimplementedError('Signin Handler is not implemented');
+    async signinHandler(_req: Request, _res: Response, next: NextFunction): Promise<void> {
+        await this.authService.signin();
+        next(new NotimplementedError('Signin is not implemented yet'));
     }
 }

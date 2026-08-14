@@ -1,0 +1,9 @@
+import 'dotenv/config';
+import 'dotenv/config';
+export const PORT = process.env.PORT || 3000;
+export const NODE_ENV = process.env.NODE_ENV || 'development';
+export const DB_HOST = process.env.DB_HOST || 'localhost';
+export const DB_USER = process.env.DB_USER || 'root';
+export const DB_NAME = process.env.DB_NAME || 'internal_engineering_task_management';
+export const DB_PASSWORD = process.env.DB_PASSWORD || 'Suvajit@123';
+//# sourceMappingURL=server.config.js.map
