@@ -6,10 +6,7 @@ export interface IAuthService {
 }
 
 export class AuthService implements IAuthService {
-    private readonly userRepository: IUserRepository;
-
-    constructor(userRepository: IUserRepository) {
-        this.userRepository = userRepository;
+    constructor(_userRepository: IUserRepository) {
     }
 
     async signup(): Promise<void> {
