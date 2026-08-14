@@ -26,4 +26,11 @@ userRouter.post(
   )
 );
 
+userRouter.get(
+  "/",
+  userController.findAllUsersHandler.bind(
+    userController
+  )
+);
+
 export default userRouter;

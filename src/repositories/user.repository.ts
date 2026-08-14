@@ -12,10 +12,11 @@ export interface IUserRepository {
   findByEmail(
     email: string
   ): Promise<User | null>;
+
+  findAll(): Promise<User[]>;
 }
 
-export class UserRepository
-  implements IUserRepository {
+export class UserRepository implements IUserRepository {
 
   async create(
     data: SignupDto,
@@ -42,6 +43,14 @@ export class UserRepository
     return prisma.user.findUnique({
       where: {
         email,
+      },
+    });
+  }
+
+  async findAll(): Promise<User[]> {
+    return prisma.user.findMany({
+      orderBy: {
+        id: "asc",
       },
     });
   }

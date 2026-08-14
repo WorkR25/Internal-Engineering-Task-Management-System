@@ -1,26 +1,49 @@
-import { Prisma, User } from "../../generated/prisma/client.js";
-import { SignupDto } from "../dtos/user.dto.js";
-import { IUserRepository } from "../repositories/user.repository.js";
-import { ConflictError } from "../utils/errors/app.error.js";
-import { hashPassword } from "../utils/password.hash.js";
+import {
+  Prisma,
+  User
+} from "../../generated/prisma/client.js";
+
+import {
+  SignupDto
+} from "../dtos/user.dto.js";
+
+import {
+  IUserRepository
+} from "../repositories/user.repository.js";
+
+import {
+  ConflictError
+} from "../utils/errors/app.error.js";
+
+import {
+  hashPassword
+} from "../utils/password.hash.js";
 
 export interface IUserService {
+
   createUser(
     data: SignupDto
   ): Promise<Omit<User, "passwordHash">>;
+
+  findAllUsers(): Promise<Omit<User, "passwordHash">[]>;
 }
 
 export class UserService implements IUserService {
+
   private readonly userRepository: IUserRepository;
 
-  constructor(userRepository: IUserRepository) {
+  constructor(
+    userRepository: IUserRepository
+  ) {
     this.userRepository = userRepository;
   }
 
   async createUser(
     data: SignupDto
   ): Promise<Omit<User, "passwordHash">> {
+
     try {
+
       const existingUser =
         await this.userRepository.findByEmail(
           data.email
@@ -47,7 +70,9 @@ export class UserService implements IUserService {
       } = user;
 
       return userWithoutPassword;
+
     } catch (error) {
+
       if (
         error instanceof
           Prisma.PrismaClientKnownRequestError &&
@@ -60,5 +85,21 @@ export class UserService implements IUserService {
 
       throw error;
     }
+  }
+
+  async findAllUsers(): Promise<Omit<User, "passwordHash">[]> {
+
+    const users =
+      await this.userRepository.findAll();
+
+    return users.map((user) => {
+
+      const {
+        passwordHash: _passwordHash,
+        ...userWithoutPassword
+      } = user;
+
+      return userWithoutPassword;
+    });
   }
 }
