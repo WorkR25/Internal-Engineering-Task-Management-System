@@ -13,13 +13,21 @@ import {
   UpdateRoleDto
 } from "../dtos/role.dto.js";
 
+import {
+  BadRequestError
+} from "../utils/errors/app.error.js";
+
+
 export class RoleController {
 
   private readonly roleService: RoleService;
 
-  constructor(roleService: RoleService) {
+  constructor(
+    roleService: RoleService
+  ) {
     this.roleService = roleService;
   }
+
 
   // CREATE ROLE
   createRole = async (
@@ -27,12 +35,16 @@ export class RoleController {
     res: Response,
     next: NextFunction
   ) => {
+
     try {
 
-      const data: CreateRoleDto = req.body;
+      const data: CreateRoleDto =
+        req.body;
 
       const role =
-        await this.roleService.createRole(data);
+        await this.roleService.createRole(
+          data
+        );
 
       return res.status(201).json({
         success: true,
@@ -44,7 +56,9 @@ export class RoleController {
       });
 
     } catch (error) {
+
       next(error);
+
     }
   };
 
@@ -55,15 +69,17 @@ export class RoleController {
     res: Response,
     next: NextFunction
   ) => {
+
     try {
 
       const roles =
         await this.roleService.getAllRoles();
 
-      const formattedRoles = roles.map((role) => ({
-        ...role,
-        id: role.id.toString()
-      }));
+      const formattedRoles =
+        roles.map((role) => ({
+          ...role,
+          id: role.id.toString()
+        }));
 
       return res.status(200).json({
         success: true,
@@ -72,7 +88,9 @@ export class RoleController {
       });
 
     } catch (error) {
+
       next(error);
+
     }
   };
 
@@ -83,21 +101,31 @@ export class RoleController {
     res: Response,
     next: NextFunction
   ) => {
+
     try {
 
       const { id } = req.params;
 
       if (typeof id !== "string") {
-        throw new Error("Invalid role ID");
+
+        throw new BadRequestError(
+          "Invalid role ID"
+        );
+
       }
 
       if (!/^\d+$/.test(id)) {
-        throw new Error("Invalid role ID");
+
+        throw new BadRequestError(
+          "Invalid role ID"
+        );
+
       }
 
       const roleId = BigInt(id);
 
-      const data: UpdateRoleDto = req.body;
+      const data: UpdateRoleDto =
+        req.body;
 
       const role =
         await this.roleService.updateRole(
@@ -115,7 +143,9 @@ export class RoleController {
       });
 
     } catch (error) {
+
       next(error);
+
     }
   };
 }

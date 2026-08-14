@@ -1,28 +1,73 @@
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "../utils/errors/app.error.js";
-import { NODE_ENV } from "../configs/server.config.js";
+import {
+  Request,
+  Response,
+  NextFunction
+} from "express";
 
-export const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
+import {
+  ZodError
+} from "zod";
 
-    if(error instanceof AppError) {
-        const body: Record<string, unknown> = {
-            success: false,
-            message: error.message
-        }
+import {
+  AppError,
+  InternalServerError,
+  BadRequestError
+} from "../utils/errors/app.error.js";
 
-        if(error.details) body['details'] = error.details;
 
-        res.status(error.statusCode).json(body);
+export const errorHandler = (
+  error: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
 
-        return;
-    }
+  // Zod validation error
+  if (error instanceof ZodError) {
 
-    const body: Record<string, unknown> = {
-        success: false,
-        message: "Something went wrong",
-    }
+    const validationError =
+      new BadRequestError(
+        "Validation failed",
+        error.issues
+      );
 
-    if(NODE_ENV === 'development') body['details'] = error.stack;
+    return res.status(
+      validationError.statusCode
+    ).json({
+      success: false,
+      message: validationError.message,
+      details: validationError.details
+    });
+  }
 
-    res.status(500).json(body);
-}
+
+  // Custom application error
+  if (error instanceof AppError) {
+
+    return res.status(
+      error.statusCode
+    ).json({
+      success: false,
+      message: error.message,
+      details: error.details
+    });
+  }
+
+
+  // Unknown / unexpected error
+  const serverError =
+    new InternalServerError(
+      "Something went wrong",
+      error instanceof Error
+        ? error.message
+        : error
+    );
+
+  return res.status(
+    serverError.statusCode
+  ).json({
+    success: false,
+    message: serverError.message,
+    details: serverError.details
+  });
+};

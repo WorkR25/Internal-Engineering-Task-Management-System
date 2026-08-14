@@ -7,6 +7,11 @@ import {
   UpdateRoleDto
 } from "../dtos/role.dto.js";
 
+import {
+  ConflictError,
+  NotfoundError
+} from "../utils/errors/app.error.js";
+
 export class RoleService {
 
   private readonly roleRepository: IRoleRepository;
@@ -27,7 +32,9 @@ export class RoleService {
       );
 
     if (existingRole) {
-      throw new Error("Role already exists");
+      throw new ConflictError(
+        "Role already exists"
+      );
     }
 
     return await this.roleRepository.create(
@@ -36,10 +43,12 @@ export class RoleService {
     );
   }
 
+
   async getAllRoles() {
 
     return await this.roleRepository.findAll();
   }
+
 
   async updateRole(
     id: bigint,
@@ -50,7 +59,9 @@ export class RoleService {
       await this.roleRepository.findById(id);
 
     if (!existingRole) {
-      throw new Error("Role not found");
+      throw new NotfoundError(
+        "Role not found"
+      );
     }
 
     const roleWithSameName =
@@ -62,7 +73,7 @@ export class RoleService {
       roleWithSameName &&
       roleWithSameName.id !== id
     ) {
-      throw new Error(
+      throw new ConflictError(
         "Role name already exists"
       );
     }

@@ -1,20 +1,45 @@
 import { prisma } from "../configs/db.config.js";
 
+export interface Role {
+  id: bigint;
+  name: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IRoleRepository {
-  findByName(name: string): Promise<any>;
-  findById(id: bigint): Promise<any>;
-  findAll(): Promise<any[]>;
-  create(name: string, description?: string): Promise<any>;
+
+  findByName(
+    name: string
+  ): Promise<Role | null>;
+
+  findById(
+    id: bigint
+  ): Promise<Role | null>;
+
+  findAll(): Promise<Role[]>;
+
+  create(
+    name: string,
+    description?: string
+  ): Promise<Role>;
+
   update(
     id: bigint,
     name: string,
     description?: string
-  ): Promise<any>;
+  ): Promise<Role>;
 }
 
-export class RoleRepository implements IRoleRepository {
 
-  async findByName(name: string): Promise<any> {
+export class RoleRepository
+  implements IRoleRepository {
+
+  async findByName(
+    name: string
+  ): Promise<Role | null> {
+
     return await prisma.role.findUnique({
       where: {
         name
@@ -22,7 +47,11 @@ export class RoleRepository implements IRoleRepository {
     });
   }
 
-  async findById(id: bigint): Promise<any> {
+
+  async findById(
+    id: bigint
+  ): Promise<Role | null> {
+
     return await prisma.role.findUnique({
       where: {
         id
@@ -30,7 +59,9 @@ export class RoleRepository implements IRoleRepository {
     });
   }
 
-  async findAll(): Promise<any[]> {
+
+  async findAll(): Promise<Role[]> {
+
     return await prisma.role.findMany({
       orderBy: {
         id: "asc"
@@ -38,10 +69,11 @@ export class RoleRepository implements IRoleRepository {
     });
   }
 
+
   async create(
     name: string,
     description?: string
-  ): Promise<any> {
+  ): Promise<Role> {
 
     return await prisma.role.create({
       data: {
@@ -53,11 +85,12 @@ export class RoleRepository implements IRoleRepository {
     });
   }
 
+
   async update(
     id: bigint,
     name: string,
     description?: string
-  ): Promise<any> {
+  ): Promise<Role> {
 
     return await prisma.role.update({
       where: {
