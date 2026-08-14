@@ -1,6 +1,6 @@
-import type { Prisma } from '@prisma/client';
+import type { CreateRoleDto, UpdateRoleDto } from '../dtos/role.dto.js';
 export declare class RoleService {
-    create(data: Prisma.RoleCreateInput): Prisma.Prisma__RoleClient<{
+    create(data: CreateRoleDto): import("@prisma/client").Prisma.Prisma__RoleClient<{
         id: bigint;
         name: string;
         description: string | null;
@@ -9,7 +9,7 @@ export declare class RoleService {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         adapter: import("@prisma/adapter-mariadb").PrismaMariaDb;
     }>;
-    find(id: bigint): Prisma.Prisma__RoleClient<{
+    find(id: bigint): import("@prisma/client").Prisma.Prisma__RoleClient<{
         id: bigint;
         name: string;
         description: string | null;
@@ -18,14 +18,14 @@ export declare class RoleService {
     } | null, null, import("@prisma/client/runtime/client").DefaultArgs, {
         adapter: import("@prisma/adapter-mariadb").PrismaMariaDb;
     }>;
-    findAll(): Prisma.PrismaPromise<{
+    findAll(): import("@prisma/client").Prisma.PrismaPromise<{
         id: bigint;
         name: string;
         description: string | null;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
-    update(id: bigint, data: Prisma.RoleUpdateInput): Prisma.Prisma__RoleClient<{
+    update(id: bigint, data: UpdateRoleDto): import("@prisma/client").Prisma.Prisma__RoleClient<{
         id: bigint;
         name: string;
         description: string | null;
@@ -34,7 +34,7 @@ export declare class RoleService {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         adapter: import("@prisma/adapter-mariadb").PrismaMariaDb;
     }>;
-    delete(id: bigint): Prisma.Prisma__RoleClient<{
+    delete(id: bigint): import("@prisma/client").Prisma.Prisma__RoleClient<{
         id: bigint;
         name: string;
         description: string | null;

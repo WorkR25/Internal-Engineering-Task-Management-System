@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { createRoleDto, updateRoleDto } from '../dtos/role.dto.js';
 import { RoleService } from '../services/role.service.js';
 
 const roleService = new RoleService();
@@ -24,7 +25,13 @@ export class RoleController {
     }
 
     async create(req: Request, res: Response): Promise<void> {
-        const role = await roleService.create(req.body);
+        const result = createRoleDto.safeParse(req.body);
+        if (!result.success) {
+            this.sendJson(res, { message: 'Invalid role data', details: result.error.flatten() }, 400);
+            return;
+        }
+
+        const role = await roleService.create(result.data);
 
         this.sendJson(res, {
             message: 'Role created successfully',
@@ -48,7 +55,13 @@ export class RoleController {
 
     async update(req: Request, res: Response): Promise<void> {
         try {
-            const role = await roleService.update(this.getRoleId(req), req.body);
+            const result = updateRoleDto.safeParse(req.body);
+            if (!result.success) {
+                this.sendJson(res, { message: 'Invalid role data', details: result.error.flatten() }, 400);
+                return;
+            }
+
+            const role = await roleService.update(this.getRoleId(req), result.data);
             this.sendJson(res, {
                 message: 'Role updated successfully',
                 data: role,

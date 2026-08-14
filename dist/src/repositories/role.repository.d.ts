@@ -1,6 +1,7 @@
 import type { Prisma } from '@prisma/client';
+import type { CreateRoleDto, UpdateRoleDto } from '../dtos/role.dto.js';
 export declare class RoleRepository {
-    create(data: Prisma.RoleCreateInput): Prisma.Prisma__RoleClient<{
+    create(input: CreateRoleDto): Prisma.Prisma__RoleClient<{
         id: bigint;
         name: string;
         description: string | null;
@@ -25,7 +26,7 @@ export declare class RoleRepository {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
-    update(id: bigint, data: Prisma.RoleUpdateInput): Prisma.Prisma__RoleClient<{
+    update(id: bigint, input: UpdateRoleDto): Prisma.Prisma__RoleClient<{
         id: bigint;
         name: string;
         description: string | null;

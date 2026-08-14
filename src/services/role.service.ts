@@ -1,11 +1,11 @@
 import { RoleRepository } from '../repositories/role.repository.js';
-import type { Prisma } from '@prisma/client';
+import type { CreateRoleDto, UpdateRoleDto } from '../dtos/role.dto.js';
  
 const roleRepository = new RoleRepository();
 
 export class RoleService {
 
-    create(data: Prisma.RoleCreateInput) {
+    create(data: CreateRoleDto) {
         return roleRepository.create(data);
     }
 
@@ -17,7 +17,7 @@ export class RoleService {
         return roleRepository.findAll();
     }
 
-    update(id: bigint, data: Prisma.RoleUpdateInput) {
+    update(id: bigint, data: UpdateRoleDto) {
         return roleRepository.update(id, data);
     }
 

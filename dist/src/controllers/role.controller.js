@@ -1,3 +1,4 @@
+import { createRoleDto, updateRoleDto } from '../dtos/role.dto.js';
 import { RoleService } from '../services/role.service.js';
 const roleService = new RoleService();
 const jsonReplacer = (_key, value) => typeof value === 'bigint' ? value.toString() : value;
@@ -15,7 +16,12 @@ export class RoleController {
         return BigInt(id);
     }
     async create(req, res) {
-        const role = await roleService.create(req.body);
+        const result = createRoleDto.safeParse(req.body);
+        if (!result.success) {
+            this.sendJson(res, { message: 'Invalid role data', details: result.error.flatten() }, 400);
+            return;
+        }
+        const role = await roleService.create(result.data);
         this.sendJson(res, {
             message: 'Role created successfully',
             data: role,
@@ -36,7 +42,12 @@ export class RoleController {
     }
     async update(req, res) {
         try {
-            const role = await roleService.update(this.getRoleId(req), req.body);
+            const result = updateRoleDto.safeParse(req.body);
+            if (!result.success) {
+                this.sendJson(res, { message: 'Invalid role data', details: result.error.flatten() }, 400);
+                return;
+            }
+            const role = await roleService.update(this.getRoleId(req), result.data);
             this.sendJson(res, {
                 message: 'Role updated successfully',
                 data: role,
