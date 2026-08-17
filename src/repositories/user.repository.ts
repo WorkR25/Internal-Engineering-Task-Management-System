@@ -13,41 +13,50 @@ export interface IUserRepository {
   findByEmail(
     email: string
   ): Promise<User | null>;
+
+  findAll(): Promise<SafeUser[]>;
 }
 
-export class UserRepository implements IUserRepository {
+export class UserRepository {
 
-async create(
-  data: SignupDto,
-  passwordHash: string
-): Promise<SafeUser> {
-  return prisma.user.create({
-    data: {
-      fullName: data.fullName,
-      email: data.email,
-      passwordHash: passwordHash,
+  async create(
+    data: SignupDto,
+    passwordHash: string
+  ): Promise<SafeUser> {
+    return prisma.user.create({
+      data: {
+        fullName: data.fullName,
+        email: data.email,
+        passwordHash: passwordHash,
 
-      role: {
-        connect: {
-          name: DEVELOPER,
+        role: {
+          connect: {
+            name: DEVELOPER,
+          },
         },
       },
-    },
 
-    omit: {
-      passwordHash: true
-    }
-  });
-}
+      omit: {
+        passwordHash: true
+      }
+    });
+  }
 
   async findByEmail(
     email: string
   ): Promise<User | null> {
-
     return prisma.user.findUnique({
       where: {
         email,
       },
+    });
+  }
+
+  async findAll(): Promise<SafeUser[]> {
+    return prisma.user.findMany({
+      omit: {
+        passwordHash: true
+      }
     });
   }
 }
