@@ -2,7 +2,7 @@ import express from 'express';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { attchCorrelationMiddleware } from './middlewares/correlationId.middleware.js';
 import apiRouter from './routes/index.js';
-
+import cookieParser from 'cookie-parser';
 const app = express();
 
 app.set('json replacer', (_key: string, value: unknown) => {
@@ -11,7 +11,7 @@ app.set('json replacer', (_key: string, value: unknown) => {
 
 app.use(express.json());
 app.use(express.text());
-
+app.use(cookieParser());
 app.use(attchCorrelationMiddleware);
 
 app.get('/health', (_req, res) => {

@@ -22,7 +22,10 @@ export class AuthService implements IAuthService {
       throw new BadRequestError("Invalid email or password");
     }
 
-    const isPasswordValid = await comparePassword(data.password, user.passwordHash);
+    const isPasswordValid = await comparePassword(
+      data.password,
+      user.passwordHash
+    );
 
     if (!isPasswordValid) {
       throw new BadRequestError("Invalid email or password");
