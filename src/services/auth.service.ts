@@ -6,6 +6,7 @@ import { signToken } from "../utils/helpers/jwt.helper.js";
 
 export interface IAuthService {
   signIn(data: SignInDto): Promise<string>;
+  logout(): Promise<void>;
 }
 
 export class AuthService implements IAuthService {
@@ -36,4 +37,6 @@ export class AuthService implements IAuthService {
 
     return token;
   }
+
+  async logout(): Promise<void> {}
 }

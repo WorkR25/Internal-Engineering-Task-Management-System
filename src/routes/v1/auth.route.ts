@@ -10,5 +10,6 @@ const authController = new AuthController(new AuthService(new UserRepository()))
 const authRouter = Router();
 
 authRouter.post('/signin', validateBody(signInSchema), authController.signInHandler.bind(authController));
+authRouter.post('/logout', authController.logoutHandler.bind(authController));
 
 export default authRouter;
