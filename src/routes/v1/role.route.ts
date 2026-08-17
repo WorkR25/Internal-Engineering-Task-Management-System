@@ -10,5 +10,7 @@ const roleController = new RoleController(new RoleService(new RoleRepository()))
 const roleRouter = Router();
 
 roleRouter.post('/', validateBody(createRoleSchema), roleController.createRoleHandler);
+roleRouter.get('/name/:name', roleController.getRoleByNameHandler);
+roleRouter.get('/:id', roleController.getRoleByIdHandler);
 
 export default roleRouter;

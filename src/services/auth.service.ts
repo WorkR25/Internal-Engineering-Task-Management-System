@@ -1,6 +1,6 @@
 import { SignInDto } from "../dtos/auth.dto.js";
 import { IUserRepository } from "../repositories/user.repository.js";
-import { BadRequestError } from "../utils/errors/app.error.js";
+import { BadRequestError, UnauthorizedError } from "../utils/errors/app.error.js";
 import { comparePassword } from "../utils/helpers/password.helper.js";
 import { signToken } from "../utils/helpers/jwt.helper.js";
 
@@ -21,6 +21,10 @@ export class AuthService implements IAuthService {
 
     if (!user) {
       throw new BadRequestError("Invalid email or password");
+    }
+
+    if (!user.isActive) {
+      throw new UnauthorizedError("User account is deactivated");
     }
 
     const isPasswordValid = await comparePassword(data.password, user.passwordHash);

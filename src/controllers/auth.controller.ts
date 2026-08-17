@@ -12,7 +12,7 @@ export class AuthController {
         this.authService = authService;
     }
 
-    async signInHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
+    signInHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const data = req.body as SignInDto;
 
@@ -31,15 +31,19 @@ export class AuthController {
         }
     };
 
-    async logoutHandler(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    logoutHandler = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             await this.authService.logout();
 
-            res.clearCookie("token");
+            res.clearCookie('accessToken', {
+                httpOnly: true,
+                secure: COOKIE_SECURE,
+                sameSite: COOKIE_SAME_SITE,
+            });
 
             sendSuccess(res, null, StatusCodes.OK, 'Logged out successfully');
         } catch (error) {
             next(error);
         }
-    }
+    };
 }

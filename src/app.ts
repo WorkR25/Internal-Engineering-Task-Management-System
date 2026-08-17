@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { attchCorrelationMiddleware } from './middlewares/correlationId.middleware.js';
+import { NotFoundError } from './utils/errors/app.error.js';
 import apiRouter from './routes/index.js';
 
 const app = express();
@@ -21,6 +22,10 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api', apiRouter);
+
+app.use((req, _res, next) => {
+    next(new NotFoundError(`Route ${req.method} ${req.originalUrl} not found`));
+});
 
 app.use(errorHandler);
 
