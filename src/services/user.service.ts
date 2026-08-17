@@ -2,7 +2,7 @@ import { Prisma } from "../../generated/prisma/client.js";
 import { SignupDto } from "../dtos/user.dto.js";
 import { IUserRepository } from "../repositories/user.repository.js";
 import { SafeUser } from "../types/user.type.js";
-import { ConflictError, NotFoundError } from "../utils/errors/app.error.js";
+import { ConflictError,} from "../utils/errors/app.error.js";
 import { hashPassword } from "../utils/helpers/password.helper.js";
 
 export interface IUserService {
