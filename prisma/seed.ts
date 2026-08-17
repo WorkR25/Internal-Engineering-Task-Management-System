@@ -1,5 +1,6 @@
 import { prisma } from "../src/configs/db.config.js";
 import { hashPassword } from "../src/utils/helpers/password.helper.js";
+import { logger } from "../src/configs/logger.config.js";
 
 async function main() {
   const adminRole = await prisma.role.upsert({
@@ -30,12 +31,12 @@ async function main() {
     },
   });
 
-  console.log("Admin seed completed successfully");
+  logger.info("Admin seed completed successfully");
 }
 
 main()
   .catch((error) => {
-    console.error("Admin seed failed:", error);
+    logger.error("Admin seed failed:", error);
     process.exit(1);
   })
   .finally(async () => {

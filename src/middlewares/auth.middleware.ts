@@ -5,7 +5,7 @@ import { UserTokenPayload } from "../types/user.type.js";
 
 export const authenticate = (
     req: Request,
-    res: Response,
+    _res: Response,
     next: NextFunction
 ): void => {
     try {
@@ -19,7 +19,7 @@ export const authenticate = (
 
         const user: UserTokenPayload = verifyToken(token);
 
-        res.locals.user = user;
+        req.user = user;
 
         next();
     } catch (_error) {

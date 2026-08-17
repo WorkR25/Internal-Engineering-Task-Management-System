@@ -8,3 +8,11 @@ export interface UserTokenPayload extends JwtPayload {
     email: string;
     roleId: string;
 }
+
+declare module "express-serve-static-core" {
+    interface Request {
+        user: UserTokenPayload;
+    }
+}
+
+export {};
