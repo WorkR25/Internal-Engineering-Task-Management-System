@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { UnauthorizedError } from "../utils/errors/app.error.js";
 import { RoleRepository } from "../repositories/role.repository.js";
 import { RoleService } from "../services/role.service.js";
-import { ADMIN } from "../contants/role.constant.js";
 import { UserTokenPayload } from "../types/user.type.js";
 
 const roleService = new RoleService(new RoleRepository());
@@ -25,7 +24,7 @@ export async function authorizeAdmin(
     BigInt(user.roleId)
 );
 
-if (!role || role.name !== ADMIN) {
+if (!role || role.name !== "ADMIN") {
     return next(
         new UnauthorizedError("You are not authorized")
     );

@@ -8,8 +8,6 @@ export class UserController {
   constructor(userService: UserService) {
     this.userService = userService;
 
-    this.createUserHandler = this.createUserHandler.bind(this);
-    this.getAllUsersHandler = this.getAllUsersHandler.bind(this);
   }
 
   async createUserHandler(
