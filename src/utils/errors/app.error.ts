@@ -13,44 +13,48 @@ export class AppError extends Error {
     }
 }
 
-export class NotfoundError extends AppError {
-    constructor(message: string, details?: unknown) {
+export class NotFoundError extends AppError {
+    constructor(message = "Resource not found", details?: unknown) {
         super(message, StatusCodes.NOT_FOUND, details);
     } 
 }
+export const NotfoundError = NotFoundError;
+export type NotfoundError = NotFoundError;
 
 export class InternalServerError extends AppError {
-    constructor(message: string, details?: unknown) {
+    constructor(message = "Internal server error", details?: unknown) {
         super(message, StatusCodes.INTERNAL_SERVER_ERROR, details);
     } 
 }
 
 export class BadRequestError extends AppError {
-    constructor(message: string, details?: unknown) {
+    constructor(message = "Bad request", details?: unknown) {
         super(message, StatusCodes.BAD_REQUEST, details);
     } 
 }
 
-export class NotimplementedError extends AppError {
-    constructor(message: string, details?: unknown) {
+export class NotImplementedError extends AppError {
+    constructor(message = "Not implemented", details?: unknown) {
         super(message, StatusCodes.NOT_IMPLEMENTED, details);
     } 
 }
+export const NotimplementedError = NotImplementedError;
+export type NotimplementedError = NotImplementedError;
 
 export class UnauthorizedError extends AppError {
-    constructor(message: string, details?: unknown) {
+    constructor(message = "Unauthorized", details?: unknown) {
         super(message, StatusCodes.UNAUTHORIZED, details);
     }
 }
 
-export class ConflictError extends AppError {
-    constructor(message: string, details?: unknown) {
-        super(message, StatusCodes.CONFLICT, details);
+export class ForbiddenError extends AppError {
+    constructor(message = "Forbidden", details?: unknown) {
+        super(message, StatusCodes.FORBIDDEN, details);
     }
 }
 
-export class ForbiddenError extends AppError {
-    constructor(message: string, details?: unknown) {
-        super(message, StatusCodes.FORBIDDEN, details);
+export class ConflictError extends AppError {
+    constructor(message = "Conflict", details?: unknown) {
+        super(message, StatusCodes.CONFLICT, details);
     }
 }

@@ -2,74 +2,31 @@ import { Request, Response, NextFunction } from "express";
 import { ZodType, ZodError } from "zod";
 import { BadRequestError } from "../utils/errors/app.error.js";
 
-export const validateRequestBody = (schema: ZodType) => async (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    await schema.parse(req.body);
-    next();
-  } catch (error) {
-    if (error instanceof ZodError) {
-      const formattedError: Record<string, string>[] = error.issues.map(
-        (issue) => ({
-          message: issue.message,
-          field: issue.path.join("."),
-        })
-      );
+export const validateBody =
+  (schema: ZodType) =>
+  async (req: Request, _res: Response, next: NextFunction) => {
+    try {
+      const parsedData = await schema.parseAsync(req.body);
 
-      const message =
-        formattedError[0]?.message || "Validation failed";
+      req.body = parsedData;
 
-      next(new BadRequestError(message, { details: formattedError }));
-      return;
+      next();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const formattedError: Record<string, string>[] = error.issues.map(
+          (issue) => ({
+            message: issue.message,
+            field: issue.path.join("."),
+          })
+        );
+
+        const message =
+          formattedError[0]?.message || "Validation failed";
+
+        next(new BadRequestError(message, formattedError));
+        return;
+      }
+
+      next(error);
     }
-
-    next(error);
-  }
-};
-
-export const validateRequestParams = (schema: ZodType) => async (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    await schema.parse(req.params);
-    next();
-  } catch (error) {
-    if (error instanceof ZodError) {
-      const formattedError: Record<string, string>[] = error.issues.map(
-        (issue) => ({
-          message: issue.message,
-          field: issue.path.join("."),
-        })
-      );
-
-      const message =
-        formattedError[0]?.message || "Validation failed";
-
-      next(new BadRequestError(message, { details: formattedError }));
-      return;
-    }
-
-    next(error);
-  }
-};
-
-export const validateRequestQuery = (schema: ZodType) => async (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    await schema.parse(req.params);
-    next();
-  } catch (error) {
-    if (error instanceof ZodError) {
-      const formattedError: Record<string, string>[] = error.issues.map(
-        (issue) => ({
-          message: issue.message,
-          field: issue.path.join("."),
-        })
-      );
-
-      const message =
-        formattedError[0]?.message || "Validation failed";
-
-      next(new BadRequestError(message, { details: formattedError }));
-      return;
-    }
-
-    next(error);
-  }
-};
+  };

@@ -1,18 +1,14 @@
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../../configs/server.config.js";
+import { UserTokenPayload } from '../../types/user.type.js';
 
-export interface AccessTokenClaims extends JwtPayload {
-    userId: string;
-    role: string;
-}
-
-export function signToken(payload: AccessTokenClaims): string {
+export function signToken(payload: JwtPayload): string {
     return jwt.sign(payload, JWT_SECRET as Secret, {
         expiresIn: JWT_EXPIRES_IN
     } as jwt.SignOptions);
 }
 
-export function verifyToken(token: string): AccessTokenClaims {
-    return jwt.verify(token, JWT_SECRET as Secret) as AccessTokenClaims;
+export function verifyToken(token: string): UserTokenPayload {
+    return jwt.verify(token, JWT_SECRET as Secret) as UserTokenPayload;
 }

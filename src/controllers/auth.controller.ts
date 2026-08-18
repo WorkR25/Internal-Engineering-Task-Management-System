@@ -1,14 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { IAuthService } from "../services/auth.service.js";
-import {
-    SignInDto,
-    UpdatePasswordDto
-} from "../dtos/auth.dto.js";
+import { SignInDto } from "../dtos/auth.dto.js";
 import { sendSuccess } from "../utils/helpers/response.helper.js";
 import { COOKIE_MAX_AGE, COOKIE_SECURE, COOKIE_SAME_SITE } from "../configs/server.config.js";
-import { UnauthorizedError } from "../utils/errors/app.error.js";
-import { AuthenticatedRequest } from "../types/express.js";
 
 export class AuthController {
     private readonly authService: IAuthService;
@@ -17,57 +12,38 @@ export class AuthController {
         this.authService = authService;
     }
 
-    async signInHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
+    signInHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const data = req.body as SignInDto;
+
             const token = await this.authService.signIn(data);
 
-            res.cookie("accessToken", token, {
+            res.cookie('accessToken', token, {
                 httpOnly: true,
                 secure: COOKIE_SECURE,
                 sameSite: COOKIE_SAME_SITE,
                 maxAge: COOKIE_MAX_AGE,
             });
 
-            sendSuccess(res, null, StatusCodes.OK, "Signed in successfully");
+            sendSuccess(res, null, StatusCodes.OK, 'Signed in successfully');
         } catch (error) {
             next(error);
         }
-    }
+    };
 
-    async getCurrentUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+    logoutHandler = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { user } = req as AuthenticatedRequest;
+            await this.authService.logout();
 
-            const currentUser = await this.authService.getCurrentUserDetils(user);
+            res.clearCookie('accessToken', {
+                httpOnly: true,
+                secure: COOKIE_SECURE,
+                sameSite: COOKIE_SAME_SITE,
+            });
 
-            sendSuccess(res, currentUser, StatusCodes.OK, "Current user fetched successfully");
+            sendSuccess(res, null, StatusCodes.OK, 'Logged out successfully');
         } catch (error) {
             next(error);
         }
-    }
-
-    async updatePasswordHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            if (!req.user) {
-                throw new UnauthorizedError("Authentication required");
-            }
-
-            const data = req.body as UpdatePasswordDto;
-
-            await this.authService.updatePassword(
-                req.user,
-                data
-            );
-
-            sendSuccess(
-                res,
-                null,
-                StatusCodes.OK,
-                "Password updated successfully"
-            );
-        } catch (error) {
-            next(error);
-        }
-    }
+    };
 }

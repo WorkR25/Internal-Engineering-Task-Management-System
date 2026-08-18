@@ -1,33 +1,24 @@
 import { Request, Response, NextFunction } from "express";
-import { UserService } from "../services/user.service.js";
+import { StatusCodes } from "http-status-codes";
+import { IUserService } from "../services/user.service.js";
 import { sendSuccess } from "../utils/helpers/response.helper.js";
-import { AuthenticatedRequest } from "../types/express.js";
-import { SafeUser } from "../types/auth.type.js";
+import { SignupDto } from "../dtos/user.dto.js";
 
 export class UserController {
-  private readonly userService: UserService;
+  private readonly userService: IUserService;
 
-  constructor(userService: UserService) {
+  constructor(userService: IUserService) {
     this.userService = userService;
   }
 
-  async createUserHandler(req: Request, res: Response) {
-    const user: SafeUser = await this.userService.createUser(req.body);
-    sendSuccess(res, user, 201, 'User Created Successfully');
-  }
-
-  async updateUserHandler(req: Request, res: Response, next: NextFunction) {
+  createUserHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { user } = req as AuthenticatedRequest;
+      const data = req.body as SignupDto;
+      const user = await this.userService.createUser(data);
 
-      const loggedInUserId = user.userId;
-      const targetUserId = req.params.id as string;
-
-      const updatedUser: SafeUser = await this.userService.updateUser(loggedInUserId, BigInt(targetUserId), req.body);
-
-      sendSuccess(res, updatedUser, 200, 'User updated successfully');
+      sendSuccess(res, user, StatusCodes.CREATED, 'User created successfully');
     } catch (error) {
       next(error);
     }
-  }
+  };
 }

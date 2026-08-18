@@ -50,7 +50,7 @@ const fileFormat = winston.format.combine(
                 level,
                 message,
                 timestamp,
-                correlationId: getCorrelationId(),
+                correlationId: getCorrelationId() || null,
                 stack,
                 data
             });

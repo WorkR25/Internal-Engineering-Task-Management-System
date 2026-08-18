@@ -1,13 +1,12 @@
 import { Prisma } from "../../generated/prisma/client.js";
-import { CreateUserDto, UpdateUserDto } from "../dtos/user.dto.js";
+import { SignupDto } from "../dtos/user.dto.js";
 import { IUserRepository } from "../repositories/user.repository.js";
-import { SafeUser } from "../types/auth.type.js";
-import { ConflictError, NotfoundError, UnauthorizedError } from "../utils/errors/app.error.js";
+import { SafeUser } from "../types/user.type.js";
+import { ConflictError } from "../utils/errors/app.error.js";
 import { hashPassword } from "../utils/helpers/password.helper.js";
 
 export interface IUserService {
-  createUser(data: CreateUserDto): Promise<SafeUser>;
-  updateUser(loggedInUserId: bigint, targetUserId: bigint, data: UpdateUserDto): Promise<SafeUser>;
+  createUser(data: SignupDto): Promise<SafeUser>;
 }
 
 export class UserService implements IUserService {
@@ -17,45 +16,29 @@ export class UserService implements IUserService {
     this.userRepository = userRepository;
   }
 
-  async createUser(data: CreateUserDto): Promise<SafeUser> {
+  async createUser(data: SignupDto): Promise<SafeUser> {
     try {
-      const existingUser = await this.userRepository.findByEmail(data.email);
+      const existingUser = await this.userRepository.findByEmail(
+        data.email
+      );
+
       if (existingUser) {
         throw new ConflictError("Email already exists");
       }
+
       const passwordHash = await hashPassword(data.password);
+
       return await this.userRepository.create(data, passwordHash);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-        throw new ConflictError("A record with this value already exists");
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new ConflictError(
+          "A record with this value already exists"
+        );
       }
-      throw error;
-    }
-  }
 
- async updateUser(loggedInUserId: bigint, targetUserId: bigint, data: UpdateUserDto): Promise<SafeUser> {
-    const targetUser = await this.userRepository.findById(targetUserId);
-
-    if (!targetUser) {
-      throw new NotfoundError("User not found");
-    }
-
-    if (loggedInUserId !== targetUserId) {
-      throw new UnauthorizedError("You are not allowed to update this profile");
-    }
-
-    const updateData: Prisma.UserUpdateInput = {
-      ...(data.fullName != undefined && { fullName: data.fullName}),
-      ...(data.email != undefined && { email: data.email }),
-      ...(data.password != undefined && { passwordHash: await hashPassword(data.password)})
-    };
-
-    try {
-      return await this.userRepository.updateUser(targetUserId, updateData);
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-        throw new ConflictError("Email already in use");
-      }
       throw error;
     }
   }
