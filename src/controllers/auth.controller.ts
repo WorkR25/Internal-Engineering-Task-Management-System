@@ -70,4 +70,13 @@ export class AuthController {
             next(error);
         }
     }
+    async logoutHandler(_req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            await this.authService.logout();
+            res.clearCookie("token");
+            sendSuccess(res, null, StatusCodes.OK, "Logged out successfully");
+        } catch (error) {
+            next(error);
+        }
+    }
 }
