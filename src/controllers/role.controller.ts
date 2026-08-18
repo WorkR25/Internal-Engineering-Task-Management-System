@@ -11,6 +11,7 @@ export class RoleController {
     constructor(roleService: IRoleService) {
         this.roleService = roleService;
     }
+    
 
     async createRoleHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {

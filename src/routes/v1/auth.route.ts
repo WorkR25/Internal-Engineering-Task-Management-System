@@ -33,4 +33,5 @@ authRouter.post(
     authController.logoutHandler.bind(authController)
 );
 
+
 export default authRouter;

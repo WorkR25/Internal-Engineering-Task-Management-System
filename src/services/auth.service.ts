@@ -12,6 +12,7 @@ export interface IAuthService {
   logout(): Promise<void>;
 }
 
+
 export class AuthService implements IAuthService {
     private readonly userRepository: IUserRepository;
 
