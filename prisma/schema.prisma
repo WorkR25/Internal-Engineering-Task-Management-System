@@ -64,6 +64,7 @@ model User {
   addedProjectMembers ProjectMember[]  @relation("ProjectMemberAddedBy")
   taskAssignments     TaskAssignment[] @relation("TaskAssignmentDeveloper")
   assignedTasks       TaskAssignment[] @relation("TaskAssignmentAssignedBy")
+  taskActivities TaskActivity[]
 
   @@map("users")
 }
@@ -121,6 +122,7 @@ model Task {
   creator     User             @relation(fields: [createdBy], references: [id])
   project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
   assignments TaskAssignment[]
+  activities TaskActivity[]
 
   @@map("tasks")
 }
@@ -153,4 +155,20 @@ model TaskAssignment {
   unassignmentReason UnassignmentReason? @relation(fields: [unassignmentReasonId], references: [id])
 
   @@map("task_assignments")
+}
+model TaskActivity {
+  id          BigInt  @id @default(autoincrement())
+  taskId      BigInt  @map("task_id")
+  performedBy BigInt  @map("performed_by")
+  activityType String @map("activity_type") @db.VarChar(100)
+  oldValue    String? @map("old_value") @db.VarChar(255)
+  newValue    String? @map("new_value") @db.VarChar(255)
+  metadata    Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task     Task @relation(fields: [taskId], references: [id])
+  performer User @relation(fields: [performedBy], references: [id])
+
+  @@map("task_activities")
 }
