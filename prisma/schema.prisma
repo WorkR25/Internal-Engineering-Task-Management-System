@@ -29,6 +29,11 @@ enum TaskPriority {
   CRITICAL
 }
 
+enum ReviewDecision {
+  APPROVED
+  CHANGES_REQUESTED
+}
+
 model Role {
   id          BigInt  @id @default(autoincrement())
   name        String  @unique @db.VarChar(50)
@@ -64,6 +69,7 @@ model User {
   addedProjectMembers ProjectMember[]  @relation("ProjectMemberAddedBy")
   taskAssignments     TaskAssignment[] @relation("TaskAssignmentDeveloper")
   assignedTasks       TaskAssignment[] @relation("TaskAssignmentAssignedBy")
+  reviews             Review[]         @relation("ReviewReviewer")
 
   @@map("users")
 }
@@ -153,4 +159,27 @@ model TaskAssignment {
   unassignmentReason UnassignmentReason? @relation(fields: [unassignmentReasonId], references: [id])
 
   @@map("task_assignments")
+}
+
+
+model Review {
+  id           BigInt @id @default(autoincrement())
+  submissionId BigInt @unique @map("submission_id")
+  reviewedBy   BigInt @map("reviewed_by")
+
+  requirementAnalysisScore Int @map("requirement_analysis_score") @db.TinyInt
+  codeQualityScore         Int @map("code_quality_score") @db.TinyInt
+  codeCorrectnessScore     Int @map("code_correctness_score") @db.TinyInt
+  testingScore             Int @map("testing_score") @db.TinyInt
+  deliveryTimingScore      Int @map("delivery_timing_score") @db.TinyInt
+  preCommitQualityScore    Int @map("pre_commit_quality_score") @db.TinyInt
+
+  feedback String?        @db.Text
+  decision ReviewDecision
+
+  reviewedAt DateTime @default(now()) @map("reviewed_at")
+
+  reviewer User @relation("ReviewReviewer", fields: [reviewedBy], references: [id])
+
+  @@map("reviews")
 }
