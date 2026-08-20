@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { attchCorrelationMiddleware } from './middlewares/correlationId.middleware.js';
 import apiRouter from './routes/index.js';
+import unassignmentReasonRouter from './routes/v1/unassignment-reason.route.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api', apiRouter);
+app.use('/api/v1/unassignment-reasons', unassignmentReasonRouter);
 
 app.use(errorHandler);
 
