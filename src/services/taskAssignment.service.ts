@@ -18,11 +18,7 @@ export class TaskAssignmentService implements ITaskAssignmentService {
         this.taskassignmentRepository = taskassignmentRepository;
     }
 
- async assignTask(
-    taskId: bigint,
-    data: AssignTaskDto,
-    assignedBy: bigint
-  ): Promise<TaskAssignment> {
+ async assignTask(taskId: bigint,data: AssignTaskDto,assignedBy: bigint): Promise<TaskAssignment> {
 
     return this.taskassignmentRepository.create({
       task: { connect: { id: taskId } },
@@ -31,11 +27,7 @@ export class TaskAssignmentService implements ITaskAssignmentService {
       isCurrent: true,
     });
   }
- async reAssignTask(
-    taskId: bigint,
-    data: ReassignTaskDto,
-    assignedBy: bigint
-  ): Promise<TaskAssignment> {
+ async reAssignTask(taskId: bigint,data: ReassignTaskDto,assignedBy: bigint): Promise<TaskAssignment> {
 
     const currentAssignment =
       await this.taskassignmentRepository.findCurrentByTaskId(taskId);
