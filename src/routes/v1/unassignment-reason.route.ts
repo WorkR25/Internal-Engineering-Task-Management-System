@@ -20,14 +20,14 @@ unassignmentReasonRouter.post(
   authenticateUser,
   authorizeUser(RoleName.ADMIN),
   validateRequestBody(createUnassignmentReasonSchema),
-  unassignmentReasonController.createUnassignmentReasonHandler
+  unassignmentReasonController.createUnassignmentReasonHandler.bind(unassignmentReasonController)
 );
 
 unassignmentReasonRouter.get(
   "/",
   authenticateUser,
   authorizeUser(RoleName.ADMIN),
-  unassignmentReasonController.getAllUnassignmentReasonsHandler
+  unassignmentReasonController.getAllUnassignmentReasonsHandler.bind(unassignmentReasonController)
 );
 
 export default unassignmentReasonRouter;

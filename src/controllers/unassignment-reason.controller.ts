@@ -10,7 +10,7 @@ export class UnassignmentReasonController {
     this.unassignmentReasonService = unassignmentReasonService;
   }
 
-  createUnassignmentReasonHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async createUnassignmentReasonHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = req.body as CreateUnassignmentReasonDto;
 
@@ -20,9 +20,9 @@ export class UnassignmentReasonController {
     } catch (error) {
       next(error);
     }
-  };
+  }
 
-  getAllUnassignmentReasonsHandler = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async getAllUnassignmentReasonsHandler(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const reasons = await this.unassignmentReasonService.findAllUnassignmentReasons();
 
@@ -30,5 +30,5 @@ export class UnassignmentReasonController {
     } catch (error) {
       next(error);
     }
-  };
+  }
 }
