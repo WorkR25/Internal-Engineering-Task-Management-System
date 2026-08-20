@@ -12,7 +12,21 @@ export class TaskAssignmentController {
     }
 
     async assignTaskHandler(req: Request, res: Response, next: NextFunction) {
-        // implement properly
+        try {
+        const { user } = req as AuthenticatedRequest;
+        const taskId = BigInt(req.params.taskId as string);
+        const data = req.body;
+
+    const assignment = await this.taskAssignmentService.assignTask(
+      taskId,
+      data,
+      user.userId
+    );
+
+    sendSuccess(res, assignment, 201, "Task assigned successfully");
+    } catch (error) {
+    next(error);
+        }
     }
 
     async reAssignTaskHandler(req: Request, res: Response, next: NextFunction) {
