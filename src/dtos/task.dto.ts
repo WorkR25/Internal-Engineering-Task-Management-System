@@ -35,10 +35,12 @@ export const updateTaskSchema = z.object({
 );
 
 export const assignTaskSchema = z.object({
+  taskId: z.coerce.bigint("Task ID must be a valid number"),
   developerId: z.coerce.bigint("Developer ID must be a valid number"),
 });
 
 export const reassignTaskSchema = z.object({
+  taskId: z.coerce.bigint("Task ID must be a valid number"),
   developerId: z.coerce.bigint("Developer ID must be a valid number"),
 });
 
