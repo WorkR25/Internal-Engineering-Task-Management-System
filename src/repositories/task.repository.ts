@@ -1,5 +1,6 @@
 import { prisma } from "../configs/db.config.js";
-import { Prisma, Task } from "../../generated/prisma/client.js";
+import { Prisma, Task, } from "../../generated/prisma/client.js";
+
 
 export interface ITaskRepository {
   findById(id: bigint): Promise<Task | null>;
@@ -54,6 +55,4 @@ async findAllForDeveloper(developerId: bigint, projectId: bigint): Promise<Task[
       data
     });
   }
-  
-  
 }

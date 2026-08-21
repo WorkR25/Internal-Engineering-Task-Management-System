@@ -71,7 +71,8 @@ model User {
   assignedTasks       TaskAssignment[] @relation("TaskAssignmentAssignedBy")
   submissions         Submission[]
   reviews             Review[]
-  comments            Comment[]
+  taskActivities TaskActivity[]
+  comments       Comment[]
 
   @@map("users")
 }
@@ -130,7 +131,8 @@ model Task {
   project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
   assignments TaskAssignment[]
   submissions Submission[]
-  comments    Comment[]
+  activities TaskActivity[]
+  comments       Comment[]
 
   @@map("tasks")
 }
@@ -205,6 +207,21 @@ model Review {
   @@map("reviews")
 }
 
+model TaskActivity {
+  id          BigInt   @id @default(autoincrement())
+  taskId      BigInt   @map("task_id")
+  performedBy BigInt   @map("performed_by")
+  activityType String  @map("activity_type") @db.VarChar(100)
+  oldValue    String?  @map("old_value") @db.VarChar(255)
+  newValue    String?  @map("new_value") @db.VarChar(255)
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  task         Task @relation(fields: [taskId], references: [id])
+  performedByUser User @relation( fields: [performedBy], references: [id])
+
+  @@map("task_activities")
+}
 model Comment {
   id        BigInt    @id @default(autoincrement())
   taskId    BigInt    @map("task_id")
