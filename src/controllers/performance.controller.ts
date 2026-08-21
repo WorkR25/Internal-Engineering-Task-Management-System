@@ -15,7 +15,20 @@ export class PerformanceController {
 
     getCurrentUserPerformanceTrendHandler(req: Request, res: Response, next: NextFunction): void {}
 
-    getAllDevelopersPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+    async getAllDevelopersPerformanceHandler(req: Request,res: Response,next: NextFunction): Promise<void> {
+    try {
+        const performance =
+            await this.performanceService.getAllDevelopersPerformance();
+
+        res.status(200).json({
+            success: true,
+            message: "Developers performance fetched successfully",
+            data: performance
+        });
+    } catch (error) {
+        next(error);
+        }
+    }
 
     getDeveloperPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
 
