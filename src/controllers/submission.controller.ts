@@ -9,7 +9,6 @@ export class SubmissionController {
         this.submissionService = submissionService;
     }
 
-    async createSubmissionHandler(req: Request, res: Response, next: NextFunction) {
-        // implement properly
+    async createSubmissionHandler(_req: Request, _res: Response, _next: NextFunction) {
     }
 }

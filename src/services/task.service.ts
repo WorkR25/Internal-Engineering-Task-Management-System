@@ -6,7 +6,7 @@ import { UpdateTaskDto } from "../dtos/task.dto.js";
 import { logger } from "../configs/logger.config.js";
 export interface ITaskService {
   getTaskById(taskId: bigint): Promise<Task>;
-  getTasks(userId: bigint, role: string, projectId?: bigint): Promise<Task[]>;
+  getTasks(userId: bigint, role: string, projectId: bigint): Promise<Task[]>;
   createTask(data: CreateTaskDto, createdBy: bigint): Promise<Task>;
 }
 
@@ -43,15 +43,17 @@ export class TaskService implements ITaskService {
 
   async createTask(data: CreateTaskDto, createdBy: bigint): Promise<Task> {
     const task = await this.taskRepository.create({
-      projectId: data.projectId,
       title: data.title,
-      description: data.description,
-      status: data.status,
-      priority: data.priority,
-      createdBy,
-      deadline: data.deadline
-        ? new Date(data.deadline)
-        : undefined,
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.status !== undefined && { status: data.status }),
+      ...(data.priority !== undefined && { priority: data.priority }),
+      project: {
+        connect: { id: data.projectId },
+      },
+      creator: {
+        connect: { id: createdBy },
+      },
+      ...(data.deadline !== undefined && { deadline: data.deadline }),
     });
 
     return task;

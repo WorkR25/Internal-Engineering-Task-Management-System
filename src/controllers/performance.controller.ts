@@ -9,17 +9,17 @@ export class PerformanceController {
         this.performanceService = performanceService;
     }
 
-    getCurrentUserPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+    getCurrentUserPerformanceHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 
-    getCurrentUserTaskLevelPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+    getCurrentUserTaskLevelPerformanceHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 
-    getCurrentUserPerformanceTrendHandler(req: Request, res: Response, next: NextFunction): void {}
+    getCurrentUserPerformanceTrendHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 
-    getAllDevelopersPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+    getAllDevelopersPerformanceHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 
-    getDeveloperPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+    getDeveloperPerformanceHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 
-    getDeveloperTaskLevelPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+    getDeveloperTaskLevelPerformanceHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 
-    getDeveloperPerformanceTrendHandler(req: Request, res: Response, next: NextFunction): void {}
+    getDeveloperPerformanceTrendHandler(_req: Request, _res: Response, _next: NextFunction): void {}
 }

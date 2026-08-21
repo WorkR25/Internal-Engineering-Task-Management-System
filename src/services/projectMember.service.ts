@@ -1,4 +1,4 @@
-import { Prisma, ProjectMember } from "../../generated/prisma/client.js";
+import { ProjectMember } from "../../generated/prisma/client.js";
 import { IProjectMemberRepository} from "../repositories/projectMember.repository.js";
 import { IProjectRepository } from "../repositories/project.repository.js";
 import { IUserRepository } from "../repositories/user.repository.js";

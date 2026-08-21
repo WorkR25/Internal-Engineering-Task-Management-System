@@ -9,15 +9,15 @@ export class TaskAssignmentController {
         this.taskAssignmentService = taskAssignmentService;
     }
 
-    async assignTaskHandler(req: Request, res: Response, next: NextFunction) {
-        // implement properly
+    async assignTaskHandler(_req: Request, _res: Response, _next: NextFunction) {
+
     }
 
-    async reAssignTaskHandler(req: Request, res: Response, next: NextFunction) {
-        // implement properly
+    async reAssignTaskHandler(_req: Request, _res: Response, _next: NextFunction) {
+    
     }
 
-    async unAssignTaskHandler(req: Request, res: Response, next: NextFunction) {
-        // implement properly
+    async unAssignTaskHandler(_req: Request, _res: Response, _next: NextFunction) {
+        
     }
 }

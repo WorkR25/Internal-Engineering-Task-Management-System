@@ -7,6 +7,6 @@ export interface ITaskAssignmentRepository {
 
 export class TaskAssignmentRepository implements ITaskAssignmentRepository {
     async create(data: Prisma.TaskAssignmentCreateInput): Promise<TaskAssignment> {
-        
+        return prisma.taskAssignment.create({ data });
     }
 }
