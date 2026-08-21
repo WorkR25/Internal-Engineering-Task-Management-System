@@ -9,13 +9,13 @@ export class CommentController {
         this.commentService = commentService;
     }
 
-    async createCommentHandler(req: Request, res: Response, next: NextFunction): Promise<void> {}
+    async createCommentHandler(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 
-    async getAllCommentsHandler(req: Request, res: Response, next: NextFunction): Promise<void> {}
+    async getAllCommentsHandler(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 
-    async getCommentHandler(req: Request, res: Response, next: NextFunction): Promise<void> {}
+    async getCommentHandler(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 
-    async updateCommentHandler(req: Request, res: Response, next: NextFunction): Promise<void> {}
+    async updateCommentHandler(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 
-    async deleteCommentHandler(req: Request, res: Response, next: NextFunction): Promise<void> {}
+    async deleteCommentHandler(_req: Request, _res: Response, _next: NextFunction): Promise<void> {}
 }

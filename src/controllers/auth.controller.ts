@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { IAuthService } from "../services/auth.service.js";
-import {
-    SignInDto,
-    UpdatePasswordDto
-} from "../dtos/auth.dto.js";
+import { SignInDto, UpdatePasswordDto } from "../dtos/auth.dto.js";
 import { sendSuccess } from "../utils/helpers/response.helper.js";
 import { COOKIE_MAX_AGE, COOKIE_SECURE, COOKIE_SAME_SITE } from "../configs/server.config.js";
 import { UnauthorizedError } from "../utils/errors/app.error.js";
@@ -55,10 +52,7 @@ export class AuthController {
 
             const data = req.body as UpdatePasswordDto;
 
-            await this.authService.updatePassword(
-                req.user,
-                data
-            );
+            await this.authService.updatePassword(req.user, data);
 
             sendSuccess(
                 res,
