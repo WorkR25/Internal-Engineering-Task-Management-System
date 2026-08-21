@@ -1,4 +1,4 @@
-import { Prisma, Task } from "../../generated/prisma/client.js";
+import { Prisma, Task, } from "../../generated/prisma/client.js";
 import { CreateTaskDto } from "../dtos/task.dto.js";
 import { ITaskRepository } from "../repositories/task.repository.js";
 import { NotfoundError } from "../utils/errors/app.error.js";
@@ -8,6 +8,7 @@ export interface ITaskService {
   getTaskById(taskId: bigint): Promise<Task>;
   getTasks(userId: bigint, role: string, projectId?: bigint): Promise<Task[]>;
   createTask(data: CreateTaskDto, createdBy: bigint): Promise<Task>;
+  
 }
 
 export class TaskService implements ITaskService {

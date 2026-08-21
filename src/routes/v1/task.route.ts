@@ -10,10 +10,15 @@ import { authorizeUser } from "../../middlewares/authorization.middleware.js";
 import { TaskAssignmentController } from "../../controllers/taskAssignment.controller.js";
 import { TaskAssignmentService } from "../../services/taskAssignment.service.js";
 import { TaskAssignmentRepository } from "../../repositories/taskAssignment.repository.js";
+import { TaskActivityController } from "../../controllers/taskActivity.controller.js";
+import { TaskActivityService } from "../../services/taskActivity.service.js";
+import { TaskActivityRepository } from "../../repositories/taskActivity.repository.js";
 
 const taskController = new TaskController(new TaskService(new TaskRepository()));
 
 const taskAssignmentController = new TaskAssignmentController(new TaskAssignmentService(new TaskAssignmentRepository()));
+
+const taskActivityController = new TaskActivityController(new TaskActivityService(new TaskActivityRepository()));
 
 const taskRouter = Router();
 
@@ -47,6 +52,16 @@ taskRouter.patch(
   validateRequestParams(taskIdSchema),
   validateRequestBody(updateTaskSchema),
   taskController.updateTaskHandler.bind(taskController)
+);
+
+taskRouter.get(
+  "/:taskId/activities",
+  authenticateUser,
+  authorizeUser(RoleName.ADMIN),
+  validateRequestParams(taskIdSchema),
+  taskActivityController.getTaskActivitiesHandler.bind(
+    taskActivityController
+  )
 );
 
 // implemnet all the routes related to task assignment below that
