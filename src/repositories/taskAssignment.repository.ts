@@ -2,17 +2,15 @@ import { TaskAssignment } from "../../generated/prisma/client.js";
 import { prisma } from "../configs/db.config.js";
 
 export interface ITaskAssignmentRepository {
-
-  create(data: {taskId: bigint;developerId: bigint;assignedBy: bigint; }): Promise<TaskAssignment>;
+  create(data: {taskId: bigint;developerId: bigint;assignedBy: bigint;}): Promise<TaskAssignment>;
   findCurrentByTaskId(taskId: bigint): Promise<TaskAssignment | null>;
-  closeAssignment(id: bigint,unassignmentReasonId?: bigint): Promise<TaskAssignment>;
+  findCurrentAssignment(taskId: bigint, developerId: bigint): Promise<TaskAssignment | null>;
+  closeAssignment(id: bigint, unassignmentReasonId?: bigint): Promise<TaskAssignment>;
   getAssignmentHistory(taskId: bigint): Promise<TaskAssignment[]>;
 }
 
 export class TaskAssignmentRepository implements ITaskAssignmentRepository {
-
   async create(data: {taskId: bigint;developerId: bigint;assignedBy: bigint;}): Promise<TaskAssignment> {
-
     return prisma.taskAssignment.create({
       data: {
         task: { connect: { id: data.taskId } },
@@ -21,22 +19,28 @@ export class TaskAssignmentRepository implements ITaskAssignmentRepository {
         isCurrent: true,
       },
     });
-
   }
 
   async findCurrentByTaskId(taskId: bigint): Promise<TaskAssignment | null> {
-
     return prisma.taskAssignment.findFirst({
       where: {
         taskId,
         isCurrent: true,
       },
     });
+  }
 
+  async findCurrentAssignment(taskId: bigint,developerId: bigint): Promise<TaskAssignment | null> {
+    return prisma.taskAssignment.findFirst({
+      where: {
+        taskId,
+        developerId,
+        isCurrent: true,
+      },
+    });
   }
 
   async closeAssignment(id: bigint,unassignmentReasonId?: bigint): Promise<TaskAssignment> {
-
     return prisma.taskAssignment.update({
       where: { id },
       data: {
@@ -49,18 +53,12 @@ export class TaskAssignmentRepository implements ITaskAssignmentRepository {
         }),
       },
     });
-
   }
 
   async getAssignmentHistory(taskId: bigint): Promise<TaskAssignment[]> {
-
     return prisma.taskAssignment.findMany({
-      where: {
-        taskId,
-      },
-      orderBy: {
-        assignedAt: "asc",
-      },
+      where: { taskId },
+      orderBy: { assignedAt: "asc" },
     });
   }
 }
