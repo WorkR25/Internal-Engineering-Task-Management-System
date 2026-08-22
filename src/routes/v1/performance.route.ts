@@ -4,6 +4,8 @@ import { PerformanceService } from "../../services/performance.service.js";
 import { authenticateUser } from "../../middlewares/authentication.middleware.js";
 import { authorizeUser } from "../../middlewares/authorization.middleware.js";
 import { RoleName } from "../../types/role.type.js";
+import { validateRequestParams } from "../../middlewares/validate.middleware.js";
+import { developerIdSchema } from "../../dtos/performance.dto.js";
 
 const performanceController = new PerformanceController(new PerformanceService());
 
@@ -33,3 +35,10 @@ performanceRouter.get(
     performanceController.getCurrentUserPerformanceTrendHandler.bind(performanceController)
 );
 
+performanceRouter.get(
+    "/developers/:developerId",
+    authenticateUser,
+    authorizeUser(RoleName.ADMIN),
+    validateRequestParams(developerIdSchema),
+    performanceController.getDeveloperPerformanceHandler.bind(performanceController)
+);
