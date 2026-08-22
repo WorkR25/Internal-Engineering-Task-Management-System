@@ -1,7 +1,7 @@
 export interface IPerformanceService {
     getCurrentUserPerformance(userId : bigint): Promise<unknown>
     getCurrentUserTaskLevelPerformance(userId: bigint): Promise<unknown>
-    getCurrentUserPerformanceTrend(): void
+    getCurrentUserPerformanceTrend(userId: bigint): Promise<unknown>
     getAllDevelopersPerformance(): void
     getDeveloperPerformance(): void
     getDeveloperTaskLevelPerformance(): void
@@ -34,7 +34,29 @@ export class PerformanceService implements IPerformanceService {
         ];
     }
 
-    getCurrentUserPerformanceTrend(): void {}
+    async getCurrentUserPerformanceTrend(userId: bigint): Promise<unknown> {
+        return {
+            developerId: userId.toString(),
+            trend: [
+                {
+                    period: "WEEK_1",
+                    score: 72
+                },
+                {
+                    period: "WEEK_2",
+                    score: 78
+                },
+                {
+                    period: "WEEK_3",
+                    score: 82
+                },
+                {
+                    period: "WEEK_4",
+                    score: 86
+                }
+            ]
+        };
+    }
 
     getAllDevelopersPerformance(): void {}
 

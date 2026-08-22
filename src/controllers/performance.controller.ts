@@ -28,13 +28,54 @@ export class PerformanceController {
         );
     } catch (error) {
         next(error);
-}
+    }
 
  }
 
-    getCurrentUserTaskLevelPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
+   async getCurrentUserTaskLevelPerformanceHandler(req: Request, res: Response, next: NextFunction)
+        {
+        try {
+            const { user } = req as AuthenticatedRequest;
 
-    getCurrentUserPerformanceTrendHandler(req: Request, res: Response, next: NextFunction): void {}
+            const performance =
+                await this.performanceService.getCurrentUserTaskLevelPerformance(
+                    user.userId
+                );
+
+            sendSuccess(
+                res,
+                performance,
+                200,
+                "Task-level performance fetched successfully"
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+ 
+
+    async getCurrentUserPerformanceTrendHandler(req: Request, res: Response, next: NextFunction){
+        
+        console.log("API 3 CONTROLLER HIT");
+        
+        try {
+            const { user } = req as AuthenticatedRequest;
+
+            const performance =
+                await this.performanceService.getCurrentUserPerformanceTrend(
+                    user.userId
+                );
+
+            sendSuccess(
+                res,
+                performance,
+                200,
+                "Performance trend fetched successfully"
+            );
+            } catch (error) {
+                next(error);
+        }
+    }
 
     getAllDevelopersPerformanceHandler(req: Request, res: Response, next: NextFunction): void {}
 

@@ -22,7 +22,15 @@ performanceRouter.get(
     "/me/tasks",
     authenticateUser,
     authorizeUser(RoleName.DEVELOPER),
-    performanceController
-        .getCurrentUserTaskLevelPerformanceHandler
-        .bind(performanceController)
+    performanceController.getCurrentUserTaskLevelPerformanceHandler.bind(performanceController)
 );
+
+
+performanceRouter.get(
+    "/me/trend",
+    authenticateUser,
+    authorizeUser(RoleName.DEVELOPER),
+    performanceController.getCurrentUserPerformanceTrendHandler.bind(performanceController)
+);
+console.log("PERFORMANCE ROUTES LOADED - TREND");
+
