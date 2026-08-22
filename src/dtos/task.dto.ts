@@ -44,8 +44,14 @@ export const reassignTaskSchema = z.object({
   developerId: z.coerce.bigint("Developer ID must be a valid number"),
 });
 
+export const unassignTaskSchema = z.object({
+  taskId: z.coerce.bigint("Task ID must be a valid number"),
+  unassignmentReasonId: z.coerce.bigint("Unassignment Reason ID must be a valid number"),
+});
+
 export type TaskIdDto = z.infer<typeof taskIdSchema>;
 export type CreateTaskDto = z.infer<typeof createTaskSchema>;
 export type UpdateTaskDto = z.infer<typeof updateTaskSchema>;
 export type AssignTaskDto = z.infer<typeof assignTaskSchema>;
+export type UnassignTaskDto = z.infer<typeof unassignTaskSchema>;
 export type ReassignTaskDto = z.infer<typeof reassignTaskSchema>;

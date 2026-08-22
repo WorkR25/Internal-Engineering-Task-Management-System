@@ -47,7 +47,24 @@ export class TaskAssignmentController {
         }
     }
 
-    async unAssignTaskHandler(req: Request, res: Response, next: NextFunction) {
-        // implement properly
-    }
+    async unAssignTaskHandler(req: Request,res: Response,next: NextFunction) {
+  try {
+    const taskId = BigInt(req.params.taskId as string);
+    const data = req.body;
+
+    await this.taskAssignmentService.unAssignTask(
+      taskId,
+      data
+    );
+
+    sendSuccess(
+      res,
+      null,
+      200,
+      "Task unassigned successfully"
+    );
+  } catch (error) {
+    next(error);
+  }
+}
 }
