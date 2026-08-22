@@ -56,7 +56,7 @@ export class PerformanceController {
 
     async getCurrentUserPerformanceTrendHandler(req: Request, res: Response, next: NextFunction){
         
-        console.log("API 3 CONTROLLER HIT");
+
         
         try {
             const { user } = req as AuthenticatedRequest;

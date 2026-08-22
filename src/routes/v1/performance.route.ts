@@ -32,5 +32,4 @@ performanceRouter.get(
     authorizeUser(RoleName.DEVELOPER),
     performanceController.getCurrentUserPerformanceTrendHandler.bind(performanceController)
 );
-console.log("PERFORMANCE ROUTES LOADED - TREND");
 
