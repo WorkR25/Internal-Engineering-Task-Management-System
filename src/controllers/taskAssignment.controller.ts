@@ -50,4 +50,21 @@ export class TaskAssignmentController {
     async unAssignTaskHandler(req: Request, res: Response, next: NextFunction) {
         // implement properly
     }
+    async getAssignmentHistoryHandler(req: Request, res: Response, next: NextFunction) {
+    try {
+        const taskId = BigInt(req.params.taskId as string);
+
+        const assignments =
+            await this.taskAssignmentService.getAssignmentHistory(taskId);
+
+        sendSuccess(
+            res,
+            assignments,
+            200,
+            "Task assignment history fetched successfully"
+        );
+    } catch (error) {
+        next(error);
+    }
+}
 }
