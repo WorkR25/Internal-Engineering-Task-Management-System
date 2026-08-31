@@ -12,6 +12,7 @@ import { submissionRouter } from "./submission.route.js";
 import { TaskAssignmentController } from "../../controllers/taskAssignment.controller.js";
 import { TaskAssignmentService } from "../../services/taskAssignment.service.js";
 import { TaskAssignmentRepository } from "../../repositories/taskAssignment.repository.js";
+import { commentRouter } from "./comment.route.js";
 import { UnassignmentReasonController } from "../../controllers/unassignmentReason.controller.js";
 import { UnassignmentReasonService } from "../../services/unassignmentReason.service.js";
 import { UnassignmentReasonRepository } from "../../repositories/unassignmentReason.repository.js";
@@ -73,8 +74,7 @@ taskRouter.patch(
   taskController.updateTaskHandler.bind(taskController)
 );
 
-taskRouter.use("/:taskId/submissions", submissionRouter);
-
+taskRouter.use("/:taskId/comments",commentRouter);
 
 // implemnet all the routes related to task assignment below that
 
