@@ -4,7 +4,8 @@ import { TaskService } from "../../services/task.service.js";
 import { TaskRepository } from "../../repositories/task.repository.js";
 import { authenticateUser } from "../../middlewares/authentication.middleware.js";
 import { validateRequestParams,validateRequestBody, validateRequestQuery } from "../../middlewares/validate.middleware.js";
-import { createTaskSchema, taskIdSchema, updateTaskSchema,updateTaskStatusSchema, getTasksQuerySchema } from "../../dtos/task.dto.js";
+import { createTaskSchema, taskIdSchema, updateTaskSchema, getTasksQuerySchema, assignTaskSchema, reassignTaskSchema} from "../../dtos/task.dto.js";
+import {updateTaskStatusSchema} from "../../dtos/task.dto.js";
 import { RoleName } from "../../types/role.type.js";
 import { authorizeUser } from "../../middlewares/authorization.middleware.js";
 import { submissionRouter } from "./submission.route.js";
@@ -78,7 +79,23 @@ taskRouter.use("/:taskId/submissions",submissionRouter);
 
 
 // implemnet all the routes related to task assignment below that
+taskRouter.post(
+  "/:taskId/assign",
+  authenticateUser,
+  authorizeUser(RoleName.ADMIN),
+  validateRequestParams(taskIdSchema),
+  validateRequestBody(assignTaskSchema),
+  taskAssignmentController.assignTaskHandler.bind(taskAssignmentController)
+);
 
+taskRouter.post(
+  "/:taskId/reassign",
+  authenticateUser,
+  authorizeUser(RoleName.ADMIN),
+  validateRequestParams(taskIdSchema),
+  validateRequestBody(reassignTaskSchema),
+  taskAssignmentController.reAssignTaskHandler.bind(taskAssignmentController)
+);
 taskRouter.get(
     "/:taskId/assignment-history",
     authenticateUser,

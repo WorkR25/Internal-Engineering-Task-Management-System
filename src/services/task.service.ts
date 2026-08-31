@@ -33,7 +33,6 @@ export class TaskService implements ITaskService {
       userId
     );
 
-    
 
   if (!currentAssignment) {
     logger.error(

@@ -4,9 +4,7 @@ import userRouter from "./user.route.js";
 import authRouter from "./auth.route.js";
 import projectRouter from "./project.route.js";
 import { submissionRouter } from "./submission.route.js";
-
 import taskRouter from "./task.route.js";
-import { submissionRouter } from "./submission.route.js";
 import unassignmentReasonRouter from "./unassignmentReason.route.js";
 const router = Router();
 

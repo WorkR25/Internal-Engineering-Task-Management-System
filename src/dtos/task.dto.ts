@@ -34,6 +34,23 @@ export const updateTaskSchema = z.object({
   { message: "At least one field must be provided to update" }
 );
 
+export const assignTaskSchema = z.object({
+  taskId: z.coerce.bigint("Task ID must be a valid number"),
+  developerId: z.coerce.bigint("Developer ID must be a valid number"),
+});
+
+export const reassignTaskSchema = z.object({
+  taskId: z.coerce.bigint("Task ID must be a valid number"),
+  developerId: z.coerce.bigint("Developer ID must be a valid number"),
+});
+export const unassignTaskSchema = z.object({
+  taskId: z.coerce.bigint("Task ID must be a valid number"),
+  unassignmentReasonId: z.coerce.bigint(
+    "Unassignment Reason ID must be a valid number"
+  ),
+});
+
+
 export const updateTaskStatusSchema = z.object({
   status: z.enum(TaskStatus)
 });
@@ -42,4 +59,7 @@ export const updateTaskStatusSchema = z.object({
 export type TaskIdDto = z.infer<typeof taskIdSchema>;
 export type CreateTaskDto = z.infer<typeof createTaskSchema>;
 export type UpdateTaskDto = z.infer<typeof updateTaskSchema>;
+export type AssignTaskDto = z.infer<typeof assignTaskSchema>;
+export type ReassignTaskDto = z.infer<typeof reassignTaskSchema>;
 export type UpdateTaskStatusDto = z.infer<typeof updateTaskStatusSchema>;
+export type UnassignTaskDto = z.infer<typeof unassignTaskSchema>;

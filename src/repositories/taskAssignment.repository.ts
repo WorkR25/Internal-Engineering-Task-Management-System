@@ -1,40 +1,64 @@
-import { Prisma, TaskAssignment } from "../../generated/prisma/client.js";
+import { TaskAssignment } from "../../generated/prisma/client.js";
 import { prisma } from "../configs/db.config.js";
 
 export interface ITaskAssignmentRepository {
-    create(data: Prisma.TaskAssignmentCreateInput): Promise<TaskAssignment>
-    findCurrentAssignment(taskId: bigint, developerId: bigint): Promise<TaskAssignment | null>
-    getAssignmentHistory(taskId: bigint): Promise<TaskAssignment[]>
+  create(data: {taskId: bigint;developerId: bigint;assignedBy: bigint;}): Promise<TaskAssignment>;
+  findCurrentByTaskId(taskId: bigint): Promise<TaskAssignment | null>;
+  findCurrentAssignment(taskId: bigint, developerId: bigint): Promise<TaskAssignment | null>;
+  closeAssignment(id: bigint, unassignmentReasonId?: bigint): Promise<TaskAssignment>;
+  getAssignmentHistory(taskId: bigint): Promise<TaskAssignment[]>;
 }
 
 export class TaskAssignmentRepository implements ITaskAssignmentRepository {
-    async create(data: Prisma.TaskAssignmentCreateInput): Promise<TaskAssignment> {
-        return prisma.taskAssignment.create({
-            data
-        });
-    }
+  async create(data: {taskId: bigint;developerId: bigint;assignedBy: bigint;}): Promise<TaskAssignment> {
+    return prisma.taskAssignment.create({
+      data: {
+        task: { connect: { id: data.taskId } },
+        developer: { connect: { id: data.developerId } },
+        assignedByUser: { connect: { id: data.assignedBy } },
+        isCurrent: true,
+      },
+    });
+  }
 
-    async findCurrentAssignment(taskId: bigint, developerId: bigint): Promise<TaskAssignment | null> {
-        return prisma.taskAssignment.findFirst({
-            where: {
-                taskId,
-                developerId,
-                isCurrent: true
-            }
-        });
-    }
+  async findCurrentByTaskId(taskId: bigint): Promise<TaskAssignment | null> {
+    return prisma.taskAssignment.findFirst({
+      where: {
+        taskId,
+        isCurrent: true,
+      },
+    });
+  }
 
-    async getAssignmentHistory(taskId: bigint): Promise<TaskAssignment[]> {
-        return prisma.taskAssignment.findMany({
-            where: {
-                taskId
-            },
-            orderBy: {
-                assignedAt: "asc"
-            }
-        });
-    }
+  async findCurrentAssignment(taskId: bigint,developerId: bigint): Promise<TaskAssignment | null> {
+    return prisma.taskAssignment.findFirst({
+      where: {
+        taskId,
+        developerId,
+        isCurrent: true,
+      },
+    });
+  }
+
+  async closeAssignment(id: bigint,unassignmentReasonId?: bigint): Promise<TaskAssignment> {
+    return prisma.taskAssignment.update({
+      where: { id },
+      data: {
+        isCurrent: false,
+        unassignedAt: new Date(),
+        ...(unassignmentReasonId !== undefined && {
+          unassignmentReason: {
+            connect: { id: unassignmentReasonId },
+          },
+        }),
+      },
+    });
+  }
+
+  async getAssignmentHistory(taskId: bigint): Promise<TaskAssignment[]> {
+    return prisma.taskAssignment.findMany({
+      where: { taskId },
+      orderBy: { assignedAt: "asc" },
+    });
+  }
 }
-
-
-
